@@ -1,0 +1,15 @@
+# Production-like run against a cpd on this machine (e.g. the demo stack):
+#   docker compose up --build   then open http://localhost:8080
+# Override the upstream: CPD_UPSTREAM=http://10.20.0.5:8443 docker compose up
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      CPD_UPSTREAM: ${CPD_UPSTREAM:-http://host.docker.internal:8443}
+    extra_hosts:
+      # Linux needs this for host.docker.internal to resolve.
+      - "host.docker.internal:host-gateway"
